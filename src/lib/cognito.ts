@@ -8,6 +8,7 @@ import {
   UserPoolDomain,
   UserPoolIdentityProviderGoogle,
   VerificationEmailStyle,
+  BooleanAttribute,
 } from 'aws-cdk-lib/aws-cognito';
 import { Construct } from 'constructs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -40,6 +41,9 @@ export class RavasaCognito extends Construct {
       accountRecovery: AccountRecovery.PHONE_AND_EMAIL,
       userVerification: {
         emailStyle: VerificationEmailStyle.CODE,
+      },
+      customAttributes: {
+        isAdmin: new BooleanAttribute({ mutable: true }),
       },
       autoVerify: {
         email: true,
@@ -79,8 +83,8 @@ export class RavasaCognito extends Construct {
         flows: {
           authorizationCodeGrant: true,
         },
-        callbackUrls: ['https://dev.d3fbeoy7g89fap.amplifyapp.com/'],
-        logoutUrls: ['https://dev.d3fbeoy7g89fap.amplifyapp.com/'],
+        callbackUrls: ['https://dev.d27xqlna0b9pop.amplifyapp.com/'],
+        logoutUrls: ['https://dev.d27xqlna0b9pop.amplifyapp.com/'],
       },
     });
     const identityPool = new IdentityPool(this, 'CognitoAuthPool', {
