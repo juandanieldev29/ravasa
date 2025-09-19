@@ -35,12 +35,12 @@ Amplify.configure(config, { ssr: true });
 export default function Measurements() {
   return (
     <Authenticator.Provider>
-      <Authenticator socialProviders={['google']} signUpAttributes={['email']}>
-        <LoadingContextProvider>
-          <Spinner />
+      <LoadingContextProvider>
+        <Spinner />
+        <Authenticator socialProviders={['google']} signUpAttributes={['email']}>
           <UserProfile />
-        </LoadingContextProvider>
-      </Authenticator>
+        </Authenticator>
+      </LoadingContextProvider>
     </Authenticator.Provider>
   );
 }
