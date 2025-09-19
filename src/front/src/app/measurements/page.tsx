@@ -3,7 +3,6 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import { Amplify, ResourcesConfig } from 'aws-amplify';
 
-import 'react-toastify/dist/ReactToastify.css';
 import '@aws-amplify/ui-react/styles.css';
 
 const config: ResourcesConfig = {
