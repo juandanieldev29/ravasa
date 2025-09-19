@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Authenticator } from '@aws-amplify/ui-react';
+import { fetchAuthSession } from '@aws-amplify/auth';
 import { Amplify, ResourcesConfig } from 'aws-amplify';
 
 import '@aws-amplify/ui-react/styles.css';
@@ -28,6 +30,15 @@ const config: ResourcesConfig = {
 Amplify.configure(config, { ssr: true });
 
 export default function Measurements() {
+  const fetchUserProfile = async () => {
+    const session = await fetchAuthSession();
+    console.log(session);
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
   return (
     <Authenticator.Provider>
       <Authenticator socialProviders={['google']} signUpAttributes={['email']}></Authenticator>
