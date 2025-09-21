@@ -1,12 +1,22 @@
 'use client';
 
-import { Authenticator } from '@aws-amplify/ui-react';
+import { Authenticator, translations } from '@aws-amplify/ui-react';
 import { Amplify, ResourcesConfig } from 'aws-amplify';
+import { I18n } from 'aws-amplify/utils';
 
 import Spinner from '@/components/spinner';
 import UserProfile from '@/components/user-profile';
 
 import LoadingContextProvider from '@/contexts/loading-context';
+
+I18n.putVocabularies(translations);
+I18n.setLanguage('es');
+
+I18n.putVocabularies({
+  es: {
+    'Enter your Username': 'Escriba su usuario',
+  },
+});
 
 import '@aws-amplify/ui-react/styles.css';
 
@@ -20,12 +30,11 @@ const config: ResourcesConfig = {
         oauth: {
           domain: process.env.NEXT_PUBLIC_USER_POOL_DOMAIN_URL!,
           scopes: ['openid', 'profile', 'email', 'aws.cognito.signin.user.admin'],
-          redirectSignIn: ['https://dev.d27xqlna0b9pop.amplifyapp.com/'],
-          redirectSignOut: ['https://dev.d27xqlna0b9pop.amplifyapp.com/'],
+          redirectSignIn: ['https://dev.d27xqlna0b9pop.amplifyapp.com/measurements'],
+          redirectSignOut: ['https://dev.d27xqlna0b9pop.amplifyapp.com/measurements'],
           responseType: 'code',
         },
       },
-      allowGuestAccess: true,
     },
   },
 };
