@@ -1,12 +1,22 @@
 'use client';
 
-import { Authenticator } from '@aws-amplify/ui-react';
+import { Authenticator, translations } from '@aws-amplify/ui-react';
 import { Amplify, ResourcesConfig } from 'aws-amplify';
+import { I18n } from 'aws-amplify/utils';
 
 import Spinner from '@/components/spinner';
 import UserProfile from '@/components/user-profile';
 
 import LoadingContextProvider from '@/contexts/loading-context';
+
+I18n.putVocabularies(translations);
+I18n.setLanguage('es');
+
+I18n.putVocabularies({
+  es: {
+    'Enter your Username': 'Escriba su usuario',
+  },
+});
 
 import '@aws-amplify/ui-react/styles.css';
 
