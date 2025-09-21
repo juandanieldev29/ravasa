@@ -14,7 +14,7 @@ I18n.setLanguage('es');
 
 I18n.putVocabularies({
   es: {
-    'Enter your Username': 'Escriba su usuario',
+    'Enter your Username': 'Escriba su Usuario',
   },
 });
 
