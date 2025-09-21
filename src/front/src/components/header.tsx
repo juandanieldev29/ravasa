@@ -19,7 +19,7 @@ export default async function Header() {
         <Link href="/measurements" className="text-white">
           Mediciones
         </Link>
-        {session.credentials && <CloseSession />}
+        {session.tokens?.idToken && session.tokens?.accessToken && <CloseSession />}
       </nav>
     </header>
   );
