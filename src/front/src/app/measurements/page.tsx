@@ -20,12 +20,11 @@ const config: ResourcesConfig = {
         oauth: {
           domain: process.env.NEXT_PUBLIC_USER_POOL_DOMAIN_URL!,
           scopes: ['openid', 'profile', 'email', 'aws.cognito.signin.user.admin'],
-          redirectSignIn: ['https://dev.d27xqlna0b9pop.amplifyapp.com/'],
-          redirectSignOut: ['https://dev.d27xqlna0b9pop.amplifyapp.com/'],
+          redirectSignIn: ['https://dev.d27xqlna0b9pop.amplifyapp.com/measurements'],
+          redirectSignOut: ['https://dev.d27xqlna0b9pop.amplifyapp.com/measurements'],
           responseType: 'code',
         },
       },
-      allowGuestAccess: true,
     },
   },
 };
