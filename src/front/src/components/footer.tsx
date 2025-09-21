@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="flex items-center flex-col mt-8">
+    <footer className="flex items-center flex-col mt-8 shadow-[0_-5px_5px_-3px_rgba(0,0,0,0.1)]">
       <small className="text-base">&copy; 2025 Ravasa</small>
       <div className="flex">
         <Link
