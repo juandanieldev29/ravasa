@@ -2,6 +2,7 @@ import { Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { App, GitHubSourceCodeProvider, Platform } from '@aws-cdk/aws-amplify-alpha';
+import { ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { BuildSpec } from 'aws-cdk-lib/aws-codebuild';
 
 interface AmplifyHostingStackProps {
@@ -31,6 +32,12 @@ export class RavasaAmplifyHostingStack extends Stack {
     identityPoolId: string,
     userPoolDomainUrl: string,
   ) {
+    const computeRole = new Role(this, 'ComputeRole', {
+      assumedBy: new ServicePrincipal('amplify.amazonaws.com'),
+    });
+    computeRole.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSAppSyncPushToCloudWatchLogs'),
+    );
     const amplifyApp = new App(this, 'AmplifyApp', {
       appName: 'ravasa',
       sourceCodeProvider: new GitHubSourceCodeProvider({
@@ -38,6 +45,7 @@ export class RavasaAmplifyHostingStack extends Stack {
         repository: 'ravasa',
         oauthToken: githubTokenSecret.secretValue,
       }),
+      computeRole: computeRole,
       autoBranchDeletion: true,
       environmentVariables: {
         AMPLIFY_MONOREPO_APP_ROOT: 'src/front',
