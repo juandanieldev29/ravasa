@@ -32,6 +32,12 @@ export class RavasaAmplifyHostingStack extends Stack {
     identityPoolId: string,
     userPoolDomainUrl: string,
   ) {
+    const serviceRole = new Role(this, 'ServiceRole', {
+      assumedBy: new ServicePrincipal('amplify.amazonaws.com'),
+    });
+    serviceRole.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSAppSyncPushToCloudWatchLogs'),
+    );
     const computeRole = new Role(this, 'ComputeRole', {
       assumedBy: new ServicePrincipal('amplify.amazonaws.com'),
     });
@@ -45,6 +51,7 @@ export class RavasaAmplifyHostingStack extends Stack {
         repository: 'ravasa',
         oauthToken: githubTokenSecret.secretValue,
       }),
+      role: serviceRole,
       computeRole: computeRole,
       autoBranchDeletion: true,
       environmentVariables: {
