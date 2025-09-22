@@ -10,6 +10,8 @@ export default async function Header() {
     nextServerContext: { cookies },
     operation: (contextSpec) => fetchAuthSession(contextSpec),
   });
+  const sentCookies = await cookies();
+  console.log(JSON.stringify(sentCookies.getAll()));
   return (
     <header className="w-full flex shadow-sm bg-slate-900 p-2">
       <h1 className="text-4xl lg:text-5xl text-white grow-6">
