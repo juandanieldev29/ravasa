@@ -10,6 +10,8 @@ export default async function Header() {
     nextServerContext: { cookies },
     operation: (contextSpec) => fetchAuthSession(contextSpec),
   });
+  console.log('Session');
+  console.log(JSON.stringify(session));
   const sentCookies = await cookies();
   console.log('Sent cookies');
   console.log(JSON.stringify(sentCookies.getAll()));
