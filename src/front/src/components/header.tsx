@@ -10,12 +10,6 @@ export default async function Header() {
     nextServerContext: { cookies },
     operation: (contextSpec) => fetchAuthSession(contextSpec),
   });
-  console.log(process.env.USER_POOL_ID);
-  console.log('Session');
-  console.log(JSON.stringify(session));
-  const sentCookies = await cookies();
-  console.log('Sent cookies');
-  console.log(JSON.stringify(sentCookies.getAll()));
   return (
     <header className="w-full flex shadow-sm bg-slate-900 p-2">
       <h1 className="text-4xl lg:text-5xl text-white grow-6">
@@ -25,8 +19,6 @@ export default async function Header() {
         <Link href="/measurements" className="text-white">
           Mediciones
         </Link>
-        <p>ID Token:{JSON.stringify(session.tokens?.idToken)}</p>
-        <CloseSession />
         {session.tokens?.idToken && session.tokens?.accessToken && <CloseSession />}
       </nav>
     </header>
