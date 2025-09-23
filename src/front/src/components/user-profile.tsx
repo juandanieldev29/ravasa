@@ -47,7 +47,7 @@ export default function UserProfile() {
     <>
       {givenName && (
         <>
-          <p>Hola {givenName}</p>
+          <h3 className="text-3xl">Hola {givenName}</h3>
           <p>Tu correo es {email}</p>
           <p>Eres administrador? {isAdmin ? 'Si' : 'No'}</p>
         </>
