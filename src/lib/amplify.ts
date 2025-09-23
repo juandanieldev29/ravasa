@@ -36,13 +36,13 @@ export class RavasaAmplifyHostingStack extends Stack {
       assumedBy: new ServicePrincipal('amplify.amazonaws.com'),
     });
     serviceRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSAppSyncPushToCloudWatchLogs'),
+      ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess-Amplify'),
     );
     const computeRole = new Role(this, 'ComputeRole', {
       assumedBy: new ServicePrincipal('amplify.amazonaws.com'),
     });
     computeRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSAppSyncPushToCloudWatchLogs'),
+      ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLogsFullAccess'),
     );
     const amplifyApp = new App(this, 'AmplifyApp', {
       appName: 'ravasa',
