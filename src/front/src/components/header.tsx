@@ -10,6 +10,7 @@ export default async function Header() {
     nextServerContext: { cookies },
     operation: (contextSpec) => fetchAuthSession(contextSpec),
   });
+  console.log(process.env.USER_POOL_ID);
   console.log('Session');
   console.log(JSON.stringify(session));
   const sentCookies = await cookies();
