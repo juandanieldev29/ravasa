@@ -11,6 +11,7 @@ export default async function Header() {
     operation: (contextSpec) => fetchAuthSession(contextSpec),
   });
   const sentCookies = await cookies();
+  console.log('Sent cookies');
   console.log(JSON.stringify(sentCookies.getAll()));
   return (
     <header className="w-full flex shadow-sm bg-slate-900 p-2">
