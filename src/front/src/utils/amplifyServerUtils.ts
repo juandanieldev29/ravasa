@@ -11,8 +11,8 @@ export const { runWithAmplifyServerContext } = createServerRunner({
           oauth: {
             domain: process.env.USER_POOL_DOMAIN_URL!,
             scopes: ['openid', 'profile', 'email', 'aws.cognito.signin.user.admin'],
-            redirectSignIn: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
-            redirectSignOut: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
+            redirectSignIn: ['http://localhost:3000/measurements'],
+            redirectSignOut: ['http://localhost:3000/measurements'],
             responseType: 'code',
           },
         },
