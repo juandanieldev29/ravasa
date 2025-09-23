@@ -83,8 +83,8 @@ export class RavasaCognito extends Construct {
         flows: {
           authorizationCodeGrant: true,
         },
-        callbackUrls: ['https://dev.d20h4ot408xbeh.amplifyapp.com/measurements'],
-        logoutUrls: ['https://dev.d20h4ot408xbeh.amplifyapp.com/measurements'],
+        callbackUrls: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
+        logoutUrls: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
       },
     });
     const identityPool = new IdentityPool(this, 'CognitoAuthPool', {
