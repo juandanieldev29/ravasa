@@ -4,12 +4,12 @@ export const { runWithAmplifyServerContext } = createServerRunner({
   config: {
     Auth: {
       Cognito: {
-        userPoolId: 'us-west-2_VCQNI3mrA',
-        userPoolClientId: '3i5nmumobuv4gcvn5oqnp83210',
-        identityPoolId: 'us-west-2:7a230bee-3a55-4b37-8a1f-11a3e54cfdc2',
+        userPoolId: process.env.USER_POOL_ID!,
+        userPoolClientId: process.env.USER_POOL_CLIENT_ID!,
+        identityPoolId: process.env.IDENTITY_POOL_ID!,
         loginWith: {
           oauth: {
-            domain: 'ravasa.auth.us-west-2.amazoncognito.com',
+            domain: process.env.USER_POOL_DOMAIN_URL!,
             scopes: ['openid', 'profile', 'email', 'aws.cognito.signin.user.admin'],
             redirectSignIn: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
             redirectSignOut: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
