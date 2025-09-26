@@ -4,6 +4,8 @@ import { Construct } from 'constructs';
 import { RavasaHubSecrets } from './secret';
 import { RavasaAmplifyHostingStack } from './amplify';
 import { RavasaCognito } from './cognito';
+import { RavasaLambda } from './lambda';
+import { RavasaApiGateway } from './apigateway';
 
 export class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
@@ -20,6 +22,14 @@ export class AppStack extends Stack {
         googleSecret: googleSecret,
       },
     );
+    const { userIndexLambda, userShowLambda } = new RavasaLambda(this, 'Lambda', {
+      userPoolARN: userPool.userPoolArn,
+      userPoolId: userPool.userPoolId,
+    });
+    new RavasaApiGateway(this, 'Gateway', {
+      userIndexLambda: userIndexLambda,
+      userShowLambda: userShowLambda,
+    });
     new RavasaAmplifyHostingStack(this, 'Amplify', {
       githubTokenSecret: githubTokenSecret,
       userPoolId: userPool.userPoolId,

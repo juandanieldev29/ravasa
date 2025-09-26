@@ -6,6 +6,7 @@ import { I18n } from 'aws-amplify/utils';
 
 import Spinner from '@/components/spinner';
 import UserProfile from '@/components/user-profile';
+import Measurements from '@/components/measurements';
 
 import LoadingContextProvider from '@/contexts/loading-context';
 
@@ -30,8 +31,8 @@ const config: ResourcesConfig = {
         oauth: {
           domain: process.env.NEXT_PUBLIC_USER_POOL_DOMAIN_URL!,
           scopes: ['openid', 'profile', 'email', 'aws.cognito.signin.user.admin'],
-          redirectSignIn: ['http://localhost:3000/measurements'],
-          redirectSignOut: ['http://localhost:3000/measurements'],
+          redirectSignIn: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
+          redirectSignOut: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
           responseType: 'code',
         },
       },
@@ -41,13 +42,14 @@ const config: ResourcesConfig = {
 
 Amplify.configure(config, { ssr: true });
 
-export default function Measurements() {
+export default function MeasurementsPage() {
   return (
     <Authenticator.Provider>
       <LoadingContextProvider>
         <Spinner />
         <Authenticator socialProviders={['google']} signUpAttributes={['email']}>
           <UserProfile />
+          <Measurements />
         </Authenticator>
       </LoadingContextProvider>
     </Authenticator.Provider>
