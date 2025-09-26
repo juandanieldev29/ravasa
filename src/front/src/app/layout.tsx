@@ -39,7 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-slate-50`}
       >
         <Header />
-        <main className="w-[95%] lg:w-[80%] mx-auto mt-8 grow">{children}</main>
+        <main className="w-[95%] lg:w-[90%] mx-auto mt-4 lg:mt-8 grow">{children}</main>
         <Footer />
       </body>
     </html>

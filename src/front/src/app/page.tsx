@@ -1,6 +1,6 @@
 import Card from '@/components/card';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="grid lg:grid-cols-4 gap-4">
       <Card
