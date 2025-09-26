@@ -1,7 +1,11 @@
 import UserMeasurements from '@/components/user-measurements';
 import { IUser } from '@/types/user';
 
-export default async function UserMeasurementsPage({ params }: { params: { userId: string } }) {
+interface UserMeasurementsPageProps {
+  params: Promise<{ userId: string }>; // Declare params as a Promise
+}
+
+export default async function UserMeasurementsPage({ params }: UserMeasurementsPageProps) {
   const { userId } = await params;
   const userRes = await fetch(
     `https://ox0p0yiuqc.execute-api.us-west-2.amazonaws.com/prod/user/${userId}`,
