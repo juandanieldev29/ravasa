@@ -31,8 +31,8 @@ const config: ResourcesConfig = {
         oauth: {
           domain: process.env.NEXT_PUBLIC_USER_POOL_DOMAIN_URL!,
           scopes: ['openid', 'profile', 'email', 'aws.cognito.signin.user.admin'],
-          redirectSignIn: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
-          redirectSignOut: ['https://dev.d22jw8grtfyd4.amplifyapp.com/measurements'],
+          redirectSignIn: ['https://dev.ravasa.net', 'https://dev.ravasa.net/measurements'],
+          redirectSignOut: ['https://dev.ravasa.net', 'https://dev.ravasa.net/measurements'],
           responseType: 'code',
         },
       },

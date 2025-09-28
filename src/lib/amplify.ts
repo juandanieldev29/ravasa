@@ -1,7 +1,12 @@
 import { Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
-import { App, GitHubSourceCodeProvider, Platform } from '@aws-cdk/aws-amplify-alpha';
+import {
+  App,
+  GitHubSourceCodeProvider,
+  Platform,
+  RedirectStatus,
+} from '@aws-cdk/aws-amplify-alpha';
 import { ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { BuildSpec } from 'aws-cdk-lib/aws-codebuild';
 
@@ -42,9 +47,16 @@ export class RavasaAmplifyHostingStack extends Stack {
       assumedBy: new ServicePrincipal('amplify.amazonaws.com'),
     });
     computeRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLogsFullAccess'),
+      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
     );
     const amplifyApp = new App(this, 'AmplifyApp', {
+      customRules: [
+        {
+          source: 'https://www.dev.ravasa.net',
+          target: 'https://dev.ravasa.net',
+          status: RedirectStatus.REWRITE,
+        },
+      ],
       appName: 'ravasa',
       sourceCodeProvider: new GitHubSourceCodeProvider({
         owner: 'juandanieldev29',
@@ -99,8 +111,11 @@ export class RavasaAmplifyHostingStack extends Stack {
     amplifyApp.addBranch('main', {
       stage: 'PRODUCTION',
     });
-    amplifyApp.addBranch('dev', {
+    const dev = amplifyApp.addBranch('dev', {
       stage: 'DEVELOPMENT',
     });
+    const domain = amplifyApp.addDomain('dev.ravasa.net');
+    domain.mapRoot(dev);
+    domain.mapSubDomain(dev, 'www');
   }
 }
