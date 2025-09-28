@@ -6,6 +6,9 @@ import { RavasaAmplifyHostingStack } from './amplify';
 import { RavasaCognito } from './cognito';
 import { RavasaLambda } from './lambda';
 import { RavasaApiGateway } from './apigateway';
+import { RavasaCertificate } from './certificate';
+import { RavasaDomain } from './domain';
+import { RavasaHostedZone } from './hosted-zone';
 
 export class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
@@ -15,6 +18,13 @@ export class AppStack extends Stack {
 
   private buildAppStack() {
     const { githubTokenSecret, googleSecret } = new RavasaHubSecrets(this, 'Secret');
+    const { certificate } = new RavasaCertificate(this, 'Certificate');
+    const { domain } = new RavasaDomain(this, 'Domain', {
+      certificate: certificate,
+    });
+    new RavasaHostedZone(this, 'HostedZone', {
+      domain: domain,
+    });
     const { userPool, userPoolClient, identityPool, userPoolDomain } = new RavasaCognito(
       this,
       'Cognito',
@@ -29,6 +39,7 @@ export class AppStack extends Stack {
     new RavasaApiGateway(this, 'Gateway', {
       userIndexLambda: userIndexLambda,
       userShowLambda: userShowLambda,
+      domain: domain,
     });
     new RavasaAmplifyHostingStack(this, 'Amplify', {
       githubTokenSecret: githubTokenSecret,

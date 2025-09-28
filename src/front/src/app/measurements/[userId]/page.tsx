@@ -7,12 +7,9 @@ interface UserMeasurementsPageProps {
 
 export default async function UserMeasurementsPage({ params }: UserMeasurementsPageProps) {
   const { userId } = await params;
-  const userRes = await fetch(
-    `https://ox0p0yiuqc.execute-api.us-west-2.amazonaws.com/prod/user/${userId}`,
-    {
-      cache: 'no-store',
-    },
-  );
+  const userRes = await fetch(`https://api-dev.ravasa.net/user/${userId}`, {
+    cache: 'no-store',
+  });
   const user: IUser = await userRes.json();
   return (
     <>

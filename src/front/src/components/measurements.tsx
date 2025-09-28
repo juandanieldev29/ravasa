@@ -14,9 +14,7 @@ export default function Measurements() {
   const fetchUsers = async () => {
     try {
       dispatch({ type: LoadingAction.INCREASE_HTTP_REQUEST_COUNT });
-      const response = await fetch(
-        'https://ox0p0yiuqc.execute-api.us-west-2.amazonaws.com/prod/user',
-      );
+      const response = await fetch('https://api-dev.ravasa.net/user');
       const fetchedUsers: IUser[] = await response.json();
       setUsers(fetchedUsers);
     } catch (err) {
