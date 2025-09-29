@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect, useContext } from 'react';
-import { fetchAuthSession, fetchUserAttributes, signOut } from '@aws-amplify/auth';
+import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
 
 import { LoadingContext } from '@/contexts/loading-context';
+import { UserContext } from '@/contexts/user-context';
 import { LoadingAction } from '@/enums/loading-action';
 
 export default function UserProfile() {
+  const [session] = useContext(UserContext);
   const [givenName, setGivenName] = useState<null | string>(null);
   const [email, setEmail] = useState<null | string>(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -15,8 +17,7 @@ export default function UserProfile() {
   const fetchUserProfile = async () => {
     try {
       dispatch({ type: LoadingAction.INCREASE_HTTP_REQUEST_COUNT });
-      const session = await fetchAuthSession();
-      if (!session.tokens?.idToken) {
+      if (!session?.tokens?.idToken) {
         console.log('There is no auth session');
         signOut();
         return;
