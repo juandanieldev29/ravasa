@@ -1,4 +1,4 @@
-import { Stack } from 'aws-cdk-lib';
+import { Stack, Tags } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import {
@@ -28,6 +28,8 @@ export class RavasaAmplifyHostingStack extends Stack {
       props.identityPoolId,
       props.userPoolDomainUrl,
     );
+    Tags.of(this).add('App', 'Ravasa');
+    Tags.of(this).add('Environment', 'Development');
   }
 
   private buildAppStack(

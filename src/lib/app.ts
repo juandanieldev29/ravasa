@@ -1,4 +1,4 @@
-import { Stack } from 'aws-cdk-lib';
+import { Stack, Tags } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 import { RavasaHubSecrets } from './secret';
@@ -14,6 +14,8 @@ export class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     this.buildAppStack();
+    Tags.of(this).add('App', 'Ravasa');
+    Tags.of(this).add('Environment', 'Development');
   }
 
   private buildAppStack() {
