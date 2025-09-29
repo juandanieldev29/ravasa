@@ -19,14 +19,12 @@ export default function UserProfile() {
       dispatch({ type: LoadingAction.INCREASE_HTTP_REQUEST_COUNT });
       if (!session?.tokens?.idToken) {
         console.log('There is no auth session');
-        signOut();
         return;
       }
       const userAttributes = await fetchUserAttributes();
 
       if (!userAttributes['email'] || !userAttributes['given_name']) {
         console.log('User does not have email or given name');
-        signOut();
         return;
       }
       const isAdmin = userAttributes['custom:isAdmin'] === 'true' ? true : false;
