@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useContext } from 'react';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 
 import UserCard from '@/components/user-card';
 import { LoadingContext } from '@/contexts/loading-context';
@@ -10,7 +9,6 @@ import { LoadingAction } from '@/enums/loading-action';
 import { IUser } from '@/types/user';
 
 export default function Measurements() {
-  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const [session] = useContext(UserContext);
   const [users, setUsers] = useState<IUser[]>([]);
   const { dispatch } = useContext(LoadingContext);
@@ -40,18 +38,10 @@ export default function Measurements() {
   };
 
   useEffect(() => {
-    if (authStatus === 'authenticated') {
+    if (session?.tokens?.idToken) {
       fetchUsers();
     }
-  }, [authStatus]);
-
-  useEffect(() => {
-    if (authStatus === 'configuring') {
-      dispatch({ type: LoadingAction.INCREASE_HTTP_REQUEST_COUNT });
-    } else {
-      dispatch({ type: LoadingAction.DECREASE_HTTP_REQUEST_COUNT });
-    }
-  }, [authStatus]);
+  }, [session]);
 
   return (
     <>

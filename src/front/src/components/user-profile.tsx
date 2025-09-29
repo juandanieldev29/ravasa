@@ -2,14 +2,12 @@
 
 import { useState, useEffect, useContext } from 'react';
 import { fetchUserAttributes } from '@aws-amplify/auth';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 
 import { LoadingContext } from '@/contexts/loading-context';
 import { UserContext } from '@/contexts/user-context';
 import { LoadingAction } from '@/enums/loading-action';
 
 export default function UserProfile() {
-  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const [session] = useContext(UserContext);
   const { dispatch } = useContext(LoadingContext);
   const [givenName, setGivenName] = useState<null | string>(null);
@@ -41,14 +39,10 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
-    if (authStatus === 'authenticated') {
+    if (session?.tokens?.idToken) {
       fetchUserProfile();
     }
-  }, [authStatus]);
-
-  useEffect(() => {
-    console.log(authStatus);
-  }, [authStatus]);
+  }, [session]);
 
   return (
     <>
