@@ -47,11 +47,7 @@ export default function UserProfile() {
   }, [authStatus]);
 
   useEffect(() => {
-    if (authStatus === 'configuring') {
-      dispatch({ type: LoadingAction.INCREASE_HTTP_REQUEST_COUNT });
-    } else {
-      dispatch({ type: LoadingAction.DECREASE_HTTP_REQUEST_COUNT });
-    }
+    console.log(authStatus);
   }, [authStatus]);
 
   return (
