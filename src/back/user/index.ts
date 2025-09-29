@@ -10,8 +10,8 @@ import { CORS_HEADERS } from '../constants';
 export const handler = async (
   event: APIGatewayProxyWithCognitoAuthorizerEvent,
 ): Promise<APIGatewayProxyResult> => {
-  console.log('Authorizer claims');
-  console.log(JSON.stringify(event.requestContext.authorizer.claims));
+  const isAdminClaim = event.requestContext.authorizer.claims['custom:isAdmin'];
+  const isAdmin = isAdminClaim && isAdminClaim === 'true' ? true : false;
   const client = new CognitoIdentityProviderClient();
   const userPoolId = process.env.USER_POOL_ID;
   if (!userPoolId) {
@@ -21,10 +21,14 @@ export const handler = async (
       headers: CORS_HEADERS,
     };
   }
-  const input: ListUsersCommandInput = {
+  let input: ListUsersCommandInput = {
     UserPoolId: userPoolId,
     AttributesToGet: ['given_name', 'email', 'sub'],
   };
+  if (!isAdmin) {
+    const sub = event.requestContext.authorizer.claims['sub'];
+    input.Filter = `sub=\"${sub}\"`;
+  }
   const command = new ListUsersCommand(input);
   try {
     const response = await client.send(command);
