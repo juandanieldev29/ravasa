@@ -29,10 +29,11 @@ export default async function UserMeasurementsPage({ params }: UserMeasurementsP
     credentials: 'same-origin',
     cache: 'no-store',
   });
-  const user: IUser & { ok: boolean } = await userRes.json();
-  if (!user.ok) {
+  if (!userRes.ok) {
     redirect('/measurements');
   }
+  const user: IUser = await userRes.json();
+
   return (
     <>
       <h3 className="text-3xl">Mediciones de {user.given_name}</h3>
