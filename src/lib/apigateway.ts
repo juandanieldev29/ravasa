@@ -55,7 +55,10 @@ export class RavasaApiGateway extends Construct {
       authorizationType: AuthorizationType.COGNITO,
     });
     const singleUser = user.addResource('{id}');
-    singleUser.addMethod('GET', new LambdaIntegration(userShowLambda));
+    singleUser.addMethod('GET', new LambdaIntegration(userShowLambda), {
+      authorizer: endpointAuthorizer,
+      authorizationType: AuthorizationType.COGNITO,
+    });
 
     new BasePathMapping(this, 'api-gw-base-path-mapping', {
       domainName: domain,

@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyWithCognitoAuthorizerEvent, APIGatewayProxyResult } from 'aws-lambda';
 import {
   CognitoIdentityProviderClient,
   ListUsersCommand,
@@ -7,7 +7,9 @@ import {
 
 import { CORS_HEADERS } from '../constants';
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
   const id = event.pathParameters?.id;
   if (!id) {
     return {
@@ -21,6 +23,16 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     return {
       statusCode: 500,
       body: 'User pool ID is not configured',
+      headers: CORS_HEADERS,
+    };
+  }
+  const isAdminClaim = event.requestContext.authorizer.claims['custom:isAdmin'];
+  const sub = event.requestContext.authorizer.claims['sub'];
+  const isAdmin = isAdminClaim && isAdminClaim === 'true' ? true : false;
+  if (!isAdmin && sub !== id) {
+    return {
+      statusCode: 403,
+      body: 'You are not allowed to see this resource',
       headers: CORS_HEADERS,
     };
   }
