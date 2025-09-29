@@ -5,6 +5,7 @@ import {
   DomainName,
   CognitoUserPoolsAuthorizer,
   BasePathMapping,
+  Cors,
 } from 'aws-cdk-lib/aws-apigateway';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
@@ -38,6 +39,12 @@ export class RavasaApiGateway extends Construct {
       restApiName: 'Ravasa Service',
       handler: userIndexLambda,
       proxy: false,
+      defaultCorsPreflightOptions: {
+        allowOrigins: ['https://dev.ravasa.net'],
+        allowMethods: Cors.ALL_METHODS,
+        allowHeaders: Cors.DEFAULT_HEADERS,
+        allowCredentials: true,
+      },
     });
     const endpointAuthorizer = new CognitoUserPoolsAuthorizer(this, 'CognitoAuthorizer', {
       cognitoUserPools: [userPool],
