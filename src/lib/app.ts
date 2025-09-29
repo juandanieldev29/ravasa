@@ -40,6 +40,7 @@ export class AppStack extends Stack {
       userIndexLambda: userIndexLambda,
       userShowLambda: userShowLambda,
       domain: domain,
+      userPool: userPool,
     });
     new RavasaAmplifyHostingStack(this, 'Amplify', {
       githubTokenSecret: githubTokenSecret,

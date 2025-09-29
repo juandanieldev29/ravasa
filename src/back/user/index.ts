@@ -1,4 +1,4 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent } from 'aws-lambda';
 import {
   CognitoIdentityProviderClient,
   ListUsersCommand,
@@ -7,7 +7,11 @@ import {
 
 import { CORS_HEADERS } from '../constants';
 
-export const handler = async (): Promise<APIGatewayProxyResult> => {
+export const handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
+  console.log('Authorizer claims');
+  console.log(JSON.stringify(event.requestContext.authorizer.claims));
   const client = new CognitoIdentityProviderClient();
   const userPoolId = process.env.USER_POOL_ID;
   if (!userPoolId) {

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import UserContextProvider from '@/contexts/user-context';
+
 import ConfigureAmplifyClientSide from '@/components/configure-amplify';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -40,9 +42,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-slate-50`}
       >
         <ConfigureAmplifyClientSide />
-        <Header />
-        <main className="w-[95%] lg:w-[90%] mx-auto mt-4 lg:mt-8 grow">{children}</main>
-        <Footer />
+        <UserContextProvider>
+          <Header />
+          <main className="w-[95%] lg:w-[90%] mx-auto mt-4 lg:mt-8 grow">{children}</main>
+          <Footer />
+        </UserContextProvider>
       </body>
     </html>
   );
