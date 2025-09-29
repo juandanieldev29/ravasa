@@ -2,17 +2,19 @@
 
 import { useState, useEffect, useContext } from 'react';
 import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 import { LoadingContext } from '@/contexts/loading-context';
 import { UserContext } from '@/contexts/user-context';
 import { LoadingAction } from '@/enums/loading-action';
 
 export default function UserProfile() {
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const [session] = useContext(UserContext);
+  const { dispatch } = useContext(LoadingContext);
   const [givenName, setGivenName] = useState<null | string>(null);
   const [email, setEmail] = useState<null | string>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const { dispatch } = useContext(LoadingContext);
 
   const fetchUserProfile = async () => {
     try {
@@ -39,8 +41,22 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    if (authStatus === 'authenticated') {
+      fetchUserProfile();
+    }
+  }, [authStatus]);
+
+  useEffect(() => {
+    console.log(authStatus);
+  }, [authStatus]);
+
+  useEffect(() => {
+    if (authStatus === 'configuring') {
+      dispatch({ type: LoadingAction.INCREASE_HTTP_REQUEST_COUNT });
+    } else {
+      dispatch({ type: LoadingAction.DECREASE_HTTP_REQUEST_COUNT });
+    }
+  }, [authStatus]);
 
   return (
     <>
