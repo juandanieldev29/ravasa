@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useContext } from 'react';
-import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
+import { fetchUserAttributes } from '@aws-amplify/auth';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 import { LoadingContext } from '@/contexts/loading-context';
@@ -44,10 +44,6 @@ export default function UserProfile() {
     if (authStatus === 'authenticated') {
       fetchUserProfile();
     }
-  }, [authStatus]);
-
-  useEffect(() => {
-    console.log(authStatus);
   }, [authStatus]);
 
   useEffect(() => {
