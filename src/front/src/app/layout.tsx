@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import UserContextProvider from '@/contexts/user-context';
+import LoadingContextProvider from '@/contexts/loading-context';
 
 import ConfigureAmplifyClientSide from '@/components/configure-amplify';
 import Header from '@/components/header';
@@ -43,9 +44,11 @@ export default function RootLayout({
       >
         <ConfigureAmplifyClientSide />
         <UserContextProvider>
-          <Header />
-          <main className="w-[95%] lg:w-[90%] mx-auto mt-4 lg:mt-8 grow">{children}</main>
-          <Footer />
+          <LoadingContextProvider>
+            <Header />
+            <main className="w-[95%] lg:w-[90%] mx-auto mt-4 lg:mt-8 grow">{children}</main>
+            <Footer />
+          </LoadingContextProvider>
         </UserContextProvider>
       </body>
     </html>
