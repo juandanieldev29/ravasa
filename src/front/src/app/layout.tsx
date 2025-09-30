@@ -9,6 +9,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 
 import './globals.css';
+import Spinner from '@/components/spinner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,6 +46,7 @@ export default function RootLayout({
         <ConfigureAmplifyClientSide />
         <UserContextProvider>
           <LoadingContextProvider>
+            <Spinner />
             <Header />
             <main className="w-[95%] lg:w-[90%] mx-auto mt-4 lg:mt-8 grow">{children}</main>
             <Footer />
