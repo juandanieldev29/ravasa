@@ -49,7 +49,7 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
         waterPercentage,
         metabolicAge,
       } = measurement;
-      const month = yearMonth.split('/')[0];
+      const month = yearMonth.split('/')[1];
       return {
         month,
         weight,

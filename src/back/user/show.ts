@@ -59,13 +59,9 @@ export const handler = async (
         headers: CORS_HEADERS,
       };
     }
-    const today = new Date();
-    const defaultYearMonth = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-    }).format(today);
-    const yearMonth = event.queryStringParameters?.yearMonth;
-    const measurements = await getMeasurements(id, yearMonth ?? defaultYearMonth);
+    const currentYear = `${new Date().getFullYear()}`;
+    const year = event.queryStringParameters?.year;
+    const measurements = await getMeasurements(id, year ?? currentYear);
     const userAttributes = user.Attributes ?? [];
     const formattedAttributes = userAttributes.reduce((acc, item) => {
       const key = item.Name;
@@ -90,13 +86,13 @@ export const handler = async (
   }
 };
 
-const getMeasurements = async (userId: string, yearMonth: string): Promise<IMeasurement[]> => {
+const getMeasurements = async (userId: string, year: string): Promise<IMeasurement[]> => {
   const queryCommandParams: QueryCommandInput = {
     TableName: 'measurements',
-    KeyConditionExpression: `userId = :userId AND yearMonth = :yearMonth`,
+    KeyConditionExpression: `userId = :userId AND begins_with(yearMonth, :year)`,
     ExpressionAttributeValues: marshall({
       ':userId': userId,
-      ':yearMonth': yearMonth,
+      ':year': year,
     }),
   };
   const { Items = [] } = await ddbClient.send(new QueryCommand(queryCommandParams));
