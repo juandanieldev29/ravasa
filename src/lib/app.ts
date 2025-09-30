@@ -36,14 +36,19 @@ export class AppStack extends Stack {
         googleSecret: googleSecret,
       },
     );
-    const { userIndexLambda, userShowLambda } = new RavasaLambda(this, 'Lambda', {
-      userPoolARN: userPool.userPoolArn,
-      userPoolId: userPool.userPoolId,
-      measurementsTable: measurementsTable,
-    });
+    const { userIndexLambda, userShowLambda, measurementsNewLambda } = new RavasaLambda(
+      this,
+      'Lambda',
+      {
+        userPoolARN: userPool.userPoolArn,
+        userPoolId: userPool.userPoolId,
+        measurementsTable: measurementsTable,
+      },
+    );
     new RavasaApiGateway(this, 'Gateway', {
       userIndexLambda: userIndexLambda,
       userShowLambda: userShowLambda,
+      measurementsNewLambda: measurementsNewLambda,
       domain: domain,
       userPool: userPool,
     });

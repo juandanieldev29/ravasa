@@ -9,7 +9,7 @@ import UserMeasurements from '@/components/user-measurements';
 import { IUserWithMeasurements } from '@/types/user';
 
 interface UserMeasurementsPageProps {
-  params: Promise<{ userId: string }>; // Declare params as a Promise
+  params: Promise<{ userId: string }>;
 }
 
 export default async function UserMeasurementsPage({ params }: UserMeasurementsPageProps) {
@@ -19,7 +19,7 @@ export default async function UserMeasurementsPage({ params }: UserMeasurementsP
   });
   const { userId } = await params;
   const idToken = session?.tokens?.idToken?.toString();
-  if (!session.tokens?.idToken) {
+  if (!idToken) {
     redirect('/measurements');
   }
   const attributes = await runWithAmplifyServerContext({
