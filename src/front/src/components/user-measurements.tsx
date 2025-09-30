@@ -62,8 +62,7 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
         },
       );
       const fetchedUser: IUserWithMeasurements = await response.json();
-      console.log(fetchedUser);
-      // setUserWithMeasurements(fetchedUser);
+      setUserWithMeasurements(fetchedUser);
     } catch (err) {
       console.log(err);
     } finally {
