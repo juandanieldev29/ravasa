@@ -3,13 +3,19 @@ import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth/server';
 import { redirect } from 'next/navigation';
 
 import { runWithAmplifyServerContext } from '@/utils/amplifyServerUtils';
+import NewUserMeasurements from '@/components/new-measurement';
 
-export default async function UserMeasurementsNewPage() {
+interface UserMeasurementsNewPageProps {
+  params: Promise<{ userId: string }>;
+}
+
+export default async function UserMeasurementsNewPage({ params }: UserMeasurementsNewPageProps) {
   const session = await runWithAmplifyServerContext({
     nextServerContext: { cookies },
     operation: (contextSpec) => fetchAuthSession(contextSpec),
   });
-  if (!session.tokens?.idToken) {
+  const idToken = session?.tokens?.idToken?.toString();
+  if (!idToken) {
     redirect('/measurements');
   }
   const attributes = await runWithAmplifyServerContext({
@@ -21,5 +27,10 @@ export default async function UserMeasurementsNewPage() {
   if (!isAdmin) {
     redirect('/measurements');
   }
-  return <h1>Agregar nueva medicion</h1>;
+  return (
+    <>
+      <h3 className="text-3xl">Mediciones de {attributes.given_name}</h3>
+      <NewUserMeasurements userId={attributes.sub!} />
+    </>
+  );
 }

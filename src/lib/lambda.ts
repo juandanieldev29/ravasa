@@ -22,12 +22,17 @@ export class RavasaLambda extends Construct {
   public readonly cognitoListUsersRole: Role;
   public readonly userIndexLambda: NodejsFunction;
   public readonly userShowLambda: NodejsFunction;
+  public readonly measurementsNewLambda: NodejsFunction;
 
   constructor(scope: Construct, id: string, props: LambdaProps) {
     super(scope, id);
     this.cognitoListUsersRole = this.createRole(props.userPoolARN);
     this.userIndexLambda = this.createUserIndexFunction(props.userPoolId);
     this.userShowLambda = this.createUserShowFunction(props.userPoolId, props.measurementsTable);
+    this.measurementsNewLambda = this.createMeasurementFunction(
+      props.userPoolId,
+      props.measurementsTable,
+    );
   }
 
   private createRole(userPoolARN: string) {
@@ -79,6 +84,24 @@ export class RavasaLambda extends Construct {
       ...nodeJsFunctionProps,
     });
     measurementsTable.grantReadData(lambdaFunction);
+    return lambdaFunction;
+  }
+
+  private createMeasurementFunction(userPoolId: string, measurementsTable: ITable): NodejsFunction {
+    const nodeJsFunctionProps: NodejsFunctionProps = {
+      runtime: Runtime.NODEJS_20_X,
+      timeout: Duration.seconds(3),
+      memorySize: 128,
+    };
+    const lambdaFunction = new NodejsFunction(this, 'MeasurementNewLambdaFunction', {
+      entry: join(__dirname, `/../back/measurements/new.ts`),
+      role: this.cognitoListUsersRole,
+      environment: {
+        USER_POOL_ID: userPoolId,
+      },
+      ...nodeJsFunctionProps,
+    });
+    measurementsTable.grantReadWriteData(lambdaFunction);
     return lambdaFunction;
   }
 }

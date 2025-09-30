@@ -197,7 +197,7 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
   return (
     <>
       <form className="max-w-sm mx-auto mt-4">
-        <label htmlFor="countries">Selecciona un año</label>
+        <label htmlFor="year">Selecciona un año</label>
         <select
           id="year"
           className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
