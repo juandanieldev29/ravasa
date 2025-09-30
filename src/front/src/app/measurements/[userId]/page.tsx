@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { runWithAmplifyServerContext } from '@/utils/amplifyServerUtils';
 
 import UserMeasurements from '@/components/user-measurements';
-import { IUser } from '@/types/user';
+import { IUserWithMeasurements } from '@/types/user';
 
 interface UserMeasurementsPageProps {
   params: Promise<{ userId: string }>; // Declare params as a Promise
@@ -32,12 +32,12 @@ export default async function UserMeasurementsPage({ params }: UserMeasurementsP
   if (!userRes.ok) {
     redirect('/measurements');
   }
-  const user: IUser = await userRes.json();
+  const user: IUserWithMeasurements = await userRes.json();
 
   return (
     <>
       <h3 className="text-3xl">Mediciones de {user.given_name}</h3>
-      <UserMeasurements />
+      <UserMeasurements user={user} />
     </>
   );
 }
