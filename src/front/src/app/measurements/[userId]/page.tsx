@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { fetchAuthSession } from 'aws-amplify/auth/server';
+import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
@@ -22,6 +22,12 @@ export default async function UserMeasurementsPage({ params }: UserMeasurementsP
   if (!session.tokens?.idToken) {
     redirect('/measurements');
   }
+  const attributes = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (contextSpec) => fetchUserAttributes(contextSpec),
+  });
+  const isAdminAttribute = attributes['custom:isAdmin'];
+  const isAdmin = isAdminAttribute && isAdminAttribute === 'true' ? true : false;
   const userRes = await fetch(`https://api-dev.ravasa.net/user/${userId}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -38,11 +44,13 @@ export default async function UserMeasurementsPage({ params }: UserMeasurementsP
   return (
     <>
       <h3 className="text-3xl">Mediciones de {user.given_name}</h3>
-      <Link href={`/measurements/${user.sub}/new`}>
-        <button type="button" className="cursor-pointer bg-slate-900 text-white p-2 mt-2">
-          Agregar mediciones
-        </button>
-      </Link>
+      {isAdmin && (
+        <Link href={`/measurements/${user.sub}/new`}>
+          <button type="button" className="cursor-pointer bg-slate-900 text-white p-2 mt-2">
+            Agregar mediciones
+          </button>
+        </Link>
+      )}
       <UserMeasurements user={user} />
     </>
   );
