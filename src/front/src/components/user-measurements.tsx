@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import {
   Chart as ChartJS,
@@ -13,7 +13,10 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+import { LoadingContext } from '@/contexts/loading-context';
+import { UserContext } from '@/contexts/user-context';
 import MeasurementChart from '@/components/measurement-chart';
+import { LoadingAction } from '@/enums/loading-action';
 import { IUserWithMeasurements } from '@/types/user';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
@@ -24,6 +27,8 @@ interface UserMeasurementsProps {
 
 export default function UserMeasurements({ user }: UserMeasurementsProps) {
   const currentYear = new Date().getFullYear();
+  const [userWithMeasurements, setUserWithMeasurements] = useState<IUserWithMeasurements>(user);
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const [years, setYears] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [weightMeasurements, setWeightMeasurements] = useState<(number | null)[]>([]);
@@ -35,10 +40,40 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
     [],
   );
   const [metabolicAgeMeasurements, setMetabolicAgeMeasurements] = useState<(number | null)[]>([]);
+  const [session] = useContext(UserContext);
+  const { dispatch } = useContext(LoadingContext);
+
+  const fetchUser = async () => {
+    try {
+      dispatch({ type: LoadingAction.INCREASE_HTTP_REQUEST_COUNT });
+      if (!session?.tokens?.idToken) {
+        return;
+      }
+      const idToken = session.tokens.idToken.toString();
+      const response = await fetch(
+        `https://api-dev.ravasa.net/user/${userWithMeasurements.sub}?year=${selectedYear}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`,
+          },
+          credentials: 'same-origin',
+          cache: 'no-store',
+        },
+      );
+      const fetchedUser: IUserWithMeasurements = await response.json();
+      console.log(fetchedUser);
+      // setUserWithMeasurements(fetchedUser);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      dispatch({ type: LoadingAction.DECREASE_HTTP_REQUEST_COUNT });
+    }
+  };
 
   const getMonthlyMeasurements = () => {
     const months = getMonthsNumbers('es-CR');
-    const measurements = user.measurements.map((measurement) => {
+    const measurements = userWithMeasurements.measurements.map((measurement) => {
       const {
         yearMonth,
         weight,
@@ -137,6 +172,10 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   };
 
+  const onSelectYear = (selectedYear: string) => {
+    setSelectedYear(Number.parseInt(selectedYear, 10));
+  };
+
   useEffect(() => {
     const months = getMonthsForLocale('es-CR');
     setLabels(months);
@@ -148,7 +187,13 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
 
   useEffect(() => {
     getMonthlyMeasurements();
-  }, []);
+  }, [userWithMeasurements]);
+
+  useEffect(() => {
+    if (selectedYear) {
+      fetchUser();
+    }
+  }, [selectedYear]);
 
   return (
     <>
@@ -158,6 +203,7 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
           id="year"
           className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
           defaultValue={currentYear}
+          onChange={(event) => onSelectYear(event.target.value)}
         >
           {years.map((year) => {
             return (
