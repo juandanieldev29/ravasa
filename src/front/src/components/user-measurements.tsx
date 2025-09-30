@@ -27,49 +27,86 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
   const [years, setYears] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [weightMeasurements, setWeightMeasurements] = useState<(number | null)[]>([]);
+  const [fatPercentageMeasurements, setFatPercentageMeasurements] = useState<(number | null)[]>([]);
+  const [bodyMassIndexMeasurements, setBodyMassIndexMeasurements] = useState<(number | null)[]>([]);
+  const [visceralFatMeasurements, setVisceralFatMeasurements] = useState<(number | null)[]>([]);
+  const [muscleMassMeasurements, setMuscleMassMeasurements] = useState<(number | null)[]>([]);
   const [waterPercentageMeasurements, setWaterPercentageMeasurements] = useState<(number | null)[]>(
     [],
   );
-  const [rightArmMeasurements, setRightArmMeasurements] = useState<(number | null)[]>([]);
-  const [leftArmMeasurements, setLeftArmMeasurements] = useState<(number | null)[]>([]);
-  const [rightLegMeasurements, setRightLegMeasurements] = useState<(number | null)[]>([]);
-  const [leftLegMeasurements, setLeftLegMeasurements] = useState<(number | null)[]>([]);
+  const [metabolicAgeMeasurements, setMetabolicAgeMeasurements] = useState<(number | null)[]>([]);
 
   const getMonthlyMeasurements = () => {
     const months = getMonthsNumbers('es-CR');
     const measurements = user.measurements.map((measurement) => {
-      const { yearMonth, weight, waterPercentage, rightArm, leftArm, rightLeg, leftLeg } =
-        measurement;
+      const {
+        yearMonth,
+        weight,
+        fatPercentage,
+        bodyMassIndex,
+        visceralFat,
+        muscleMass,
+        waterPercentage,
+        metabolicAge,
+      } = measurement;
       const month = yearMonth.split('/')[0];
-      return { month, weight, waterPercentage, rightArm, leftArm, rightLeg, leftLeg };
+      return {
+        month,
+        weight,
+        fatPercentage,
+        bodyMassIndex,
+        visceralFat,
+        muscleMass,
+        waterPercentage,
+        metabolicAge,
+      };
     });
     const measurementsByMonth = months.map((month) => {
       const measurementByMonth = measurements.find((measurement) => {
         return measurement.month === month;
       });
       if (measurementByMonth) {
-        const { month, weight, waterPercentage, rightArm, leftArm, rightLeg, leftLeg } =
-          measurementByMonth;
-        return { month, weight, waterPercentage, rightArm, leftArm, rightLeg, leftLeg };
+        const {
+          month,
+          weight,
+          fatPercentage,
+          bodyMassIndex,
+          visceralFat,
+          muscleMass,
+          waterPercentage,
+          metabolicAge,
+        } = measurementByMonth;
+        return {
+          month,
+          weight,
+          fatPercentage,
+          bodyMassIndex,
+          visceralFat,
+          muscleMass,
+          waterPercentage,
+          metabolicAge,
+        };
       }
       return {
         month,
         weight: null,
+        fatPercentage: null,
+        bodyMassIndex: null,
+        visceralFat: null,
+        muscleMass: null,
         waterPercentage: null,
-        rightArm: null,
-        leftArm: null,
-        rightLeg: null,
-        leftLeg: null,
+        metabolicAge: null,
       };
     });
     setWeightMeasurements(measurementsByMonth.map(({ weight }) => weight));
+    setFatPercentageMeasurements(measurementsByMonth.map(({ fatPercentage }) => fatPercentage));
+    setBodyMassIndexMeasurements(measurementsByMonth.map(({ bodyMassIndex }) => bodyMassIndex));
+    setVisceralFatMeasurements(measurementsByMonth.map(({ visceralFat }) => visceralFat));
+    setMuscleMassMeasurements(measurementsByMonth.map(({ muscleMass }) => muscleMass));
     setWaterPercentageMeasurements(
       measurementsByMonth.map(({ waterPercentage }) => waterPercentage),
     );
-    setRightArmMeasurements(measurementsByMonth.map(({ rightArm }) => rightArm));
-    setLeftArmMeasurements(measurementsByMonth.map(({ leftArm }) => leftArm));
-    setRightLegMeasurements(measurementsByMonth.map(({ rightLeg }) => rightLeg));
-    setLeftLegMeasurements(measurementsByMonth.map(({ leftLeg }) => leftLeg));
+    setMetabolicAgeMeasurements(measurementsByMonth.map(({ metabolicAge }) => metabolicAge));
   };
 
   const getMonthsNumbers = (locale: string) => {
@@ -133,11 +170,20 @@ export default function UserMeasurements({ user }: UserMeasurementsProps) {
       </form>
       <div className="grid xl:grid-cols-2 gap-4">
         <MeasurementChart labels={labels} label="Peso" data={weightMeasurements} />
-        <MeasurementChart labels={labels} label="Peso" data={waterPercentageMeasurements} />
-        <MeasurementChart labels={labels} label="Brazo derecho" data={rightArmMeasurements} />
-        <MeasurementChart labels={labels} label="Brazo izquierdo" data={leftArmMeasurements} />
-        <MeasurementChart labels={labels} label="Pierna derecha" data={rightLegMeasurements} />
-        <MeasurementChart labels={labels} label="Pierna izquierda" data={leftLegMeasurements} />
+        <MeasurementChart
+          labels={labels}
+          label="Porcentaje de grasa"
+          data={fatPercentageMeasurements}
+        />
+        <MeasurementChart
+          labels={labels}
+          label="Índice de Masa Corporal"
+          data={bodyMassIndexMeasurements}
+        />
+        <MeasurementChart labels={labels} label="Grasa visceral" data={visceralFatMeasurements} />
+        <MeasurementChart labels={labels} label="Masa muscular" data={muscleMassMeasurements} />
+        <MeasurementChart labels={labels} label="Agua" data={waterPercentageMeasurements} />
+        <MeasurementChart labels={labels} label="Edad metabólica" data={metabolicAgeMeasurements} />
       </div>
     </>
   );
