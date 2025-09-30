@@ -45,7 +45,7 @@ export default async function UserMeasurementsPage({ params }: UserMeasurementsP
     <>
       <h3 className="text-3xl">Mediciones de {user.given_name}</h3>
       {isAdmin && (
-        <Link href={`/measurements/${user.sub}/new`}>
+        <Link href={`/measurements/${userId}/new`}>
           <button type="button" className="cursor-pointer bg-slate-900 text-white p-2 mt-2">
             Agregar mediciones
           </button>
