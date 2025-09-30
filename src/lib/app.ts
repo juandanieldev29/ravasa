@@ -9,6 +9,7 @@ import { RavasaApiGateway } from './apigateway';
 import { RavasaCertificate } from './certificate';
 import { RavasaDomain } from './domain';
 import { RavasaHostedZone } from './hosted-zone';
+import { RavasaDatabase } from './dynamo';
 
 export class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
@@ -24,6 +25,7 @@ export class AppStack extends Stack {
     const { domain } = new RavasaDomain(this, 'Domain', {
       certificate: certificate,
     });
+    const { measurementsTable } = new RavasaDatabase(this, 'Database');
     new RavasaHostedZone(this, 'HostedZone', {
       domain: domain,
     });
@@ -37,6 +39,7 @@ export class AppStack extends Stack {
     const { userIndexLambda, userShowLambda } = new RavasaLambda(this, 'Lambda', {
       userPoolARN: userPool.userPoolArn,
       userPoolId: userPool.userPoolId,
+      measurementsTable: measurementsTable,
     });
     new RavasaApiGateway(this, 'Gateway', {
       userIndexLambda: userIndexLambda,

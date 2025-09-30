@@ -1,5 +1,6 @@
 import { Duration } from 'aws-cdk-lib';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { ITable } from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 import {
   Effect,
@@ -14,6 +15,7 @@ import { join } from 'path';
 interface LambdaProps {
   readonly userPoolARN: string;
   readonly userPoolId: string;
+  readonly measurementsTable: ITable;
 }
 
 export class RavasaLambda extends Construct {
@@ -25,7 +27,7 @@ export class RavasaLambda extends Construct {
     super(scope, id);
     this.cognitoListUsersRole = this.createRole(props.userPoolARN);
     this.userIndexLambda = this.createUserIndexFunction(props.userPoolId);
-    this.userShowLambda = this.createUserShowFunction(props.userPoolId);
+    this.userShowLambda = this.createUserShowFunction(props.userPoolId, props.measurementsTable);
   }
 
   private createRole(userPoolARN: string) {
@@ -62,7 +64,7 @@ export class RavasaLambda extends Construct {
     return lambdaFunction;
   }
 
-  private createUserShowFunction(userPoolId: string): NodejsFunction {
+  private createUserShowFunction(userPoolId: string, measurementsTable: ITable): NodejsFunction {
     const nodeJsFunctionProps: NodejsFunctionProps = {
       runtime: Runtime.NODEJS_20_X,
       timeout: Duration.seconds(3),
@@ -76,6 +78,7 @@ export class RavasaLambda extends Construct {
       },
       ...nodeJsFunctionProps,
     });
+    measurementsTable.grantReadData(lambdaFunction);
     return lambdaFunction;
   }
 }

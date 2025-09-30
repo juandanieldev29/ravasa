@@ -1,10 +1,14 @@
 import { APIGatewayProxyWithCognitoAuthorizerEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { QueryCommand, QueryCommandInput } from '@aws-sdk/client-dynamodb';
 import {
   CognitoIdentityProviderClient,
   ListUsersCommand,
   ListUsersCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
+import { ddbClient } from './ddbClient';
+import { IMeasurement } from '../types/measurements';
 import { CORS_HEADERS } from '../constants';
 
 export const handler = async (
@@ -55,6 +59,13 @@ export const handler = async (
         headers: CORS_HEADERS,
       };
     }
+    const today = new Date();
+    const defaultYearMonth = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+    }).format(today);
+    const yearMonth = event.queryStringParameters?.yearMonth;
+    const measurements = await getMeasurements(id, yearMonth ?? defaultYearMonth);
     const userAttributes = user.Attributes ?? [];
     const formattedAttributes = userAttributes.reduce((acc, item) => {
       const key = item.Name;
@@ -66,7 +77,7 @@ export const handler = async (
     }, {});
     return {
       statusCode: 200,
-      body: JSON.stringify(formattedAttributes),
+      body: JSON.stringify({ ...formattedAttributes, measurements }),
       headers: CORS_HEADERS,
     };
   } catch (err) {
@@ -77,4 +88,18 @@ export const handler = async (
       headers: CORS_HEADERS,
     };
   }
+};
+
+const getMeasurements = async (userId: string, yearMonth: string): Promise<IMeasurement[]> => {
+  const queryCommandParams: QueryCommandInput = {
+    TableName: 'measurements',
+    KeyConditionExpression: `userId = :userId AND yearMonth = :yearMonth`,
+    ExpressionAttributeValues: marshall({
+      ':userId': userId,
+      ':yearMonth': yearMonth,
+    }),
+  };
+  const { Items = [] } = await ddbClient.send(new QueryCommand(queryCommandParams));
+  const measurements = Items.map((item) => unmarshall(item)) as IMeasurement[];
+  return measurements;
 };
