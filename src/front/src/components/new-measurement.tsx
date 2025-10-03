@@ -168,6 +168,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         name="weight"
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
+        step="0.1"
         onChange={({ target }) => setWeight(Number.parseInt(target.value, 10))}
       />
       <label htmlFor="fatPercentage">Porcentaje de grasa</label>
@@ -178,6 +179,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         name="fatPercentage"
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
+        step="0.1"
         onChange={({ target }) => setFatPercentage(Number.parseInt(target.value, 10))}
       />
       <label htmlFor="bodyMass">Índice de Masa Corporal</label>
@@ -188,6 +190,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         name="bodyMass"
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
+        step="0.1"
         onChange={({ target }) => setBodyMass(Number.parseInt(target.value, 10))}
       />
       <label htmlFor="visceralFat">Grasa visceral</label>
@@ -198,6 +201,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         name="visceralFat"
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
+        step="0.1"
         onChange={({ target }) => setVisceralFat(Number.parseInt(target.value, 10))}
       />
       <label htmlFor="muscleMass">Masa muscular</label>
@@ -208,6 +212,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         name="muscleMass"
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
+        step="0.1"
         onChange={({ target }) => setMuscleMass(Number.parseInt(target.value, 10))}
       />
       <label htmlFor="waterPercentage">Agua</label>
@@ -218,6 +223,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         name="waterPercentage"
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
+        step="0.1"
         onChange={({ target }) => setWaterPercentage(Number.parseInt(target.value, 10))}
       />
       <label htmlFor="metabolicAge">Edad metabólica</label>
