@@ -169,7 +169,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
         step="0.1"
-        onChange={({ target }) => setWeight(Number.parseInt(target.value, 10))}
+        onChange={({ target }) => setWeight(Number.parseFloat(target.value))}
       />
       <label htmlFor="fatPercentage">Porcentaje de grasa</label>
       <input
@@ -180,7 +180,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
         step="0.1"
-        onChange={({ target }) => setFatPercentage(Number.parseInt(target.value, 10))}
+        onChange={({ target }) => setFatPercentage(Number.parseFloat(target.value))}
       />
       <label htmlFor="bodyMass">Índice de Masa Corporal</label>
       <input
@@ -191,7 +191,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
         step="0.1"
-        onChange={({ target }) => setBodyMass(Number.parseInt(target.value, 10))}
+        onChange={({ target }) => setBodyMass(Number.parseFloat(target.value))}
       />
       <label htmlFor="visceralFat">Grasa visceral</label>
       <input
@@ -202,7 +202,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
         step="0.1"
-        onChange={({ target }) => setVisceralFat(Number.parseInt(target.value, 10))}
+        onChange={({ target }) => setVisceralFat(Number.parseFloat(target.value))}
       />
       <label htmlFor="muscleMass">Masa muscular</label>
       <input
@@ -213,7 +213,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
         step="0.1"
-        onChange={({ target }) => setMuscleMass(Number.parseInt(target.value, 10))}
+        onChange={({ target }) => setMuscleMass(Number.parseFloat(target.value))}
       />
       <label htmlFor="waterPercentage">Agua</label>
       <input
@@ -224,7 +224,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
         step="0.1"
-        onChange={({ target }) => setWaterPercentage(Number.parseInt(target.value, 10))}
+        onChange={({ target }) => setWaterPercentage(Number.parseFloat(target.value))}
       />
       <label htmlFor="metabolicAge">Edad metabólica</label>
       <input
@@ -234,7 +234,7 @@ export default function NewUserMeasurements({ userId }: NewUserMeasurementsProps
         name="metabolicAge"
         className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 mb-2"
         min={0}
-        onChange={({ target }) => setMetabolicAge(Number.parseInt(target.value, 10))}
+        onChange={({ target }) => setMetabolicAge(Number.parseFloat(target.value))}
       />
       <button
         type="submit"
